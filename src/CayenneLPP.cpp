@@ -12,6 +12,11 @@ CayenneLPP::CayenneLPP(uint8_t size) : _maxsize(size) {
   _cursor = 0;
 }
 
+CayenneLPP::CayenneLPP(uint8_t *buffer, uint8_t size) : _buffer(buffer), _maxsize(size) {
+  _buffer = (uint8_t *)malloc(size);
+  _cursor = 0;
+}
+
 CayenneLPP::~CayenneLPP(void) {
   free(_buffer);
 }
@@ -889,6 +894,7 @@ uint32_t CayenneLPP::getValue32(uint8_t * buffer, uint8_t size) {
 
 }
 
+#ifdef LPP_JSON
 uint8_t CayenneLPP::decode(uint8_t *buffer, uint8_t len, JsonArray& root) {
 
   uint8_t count = 0;
@@ -1082,3 +1088,4 @@ uint8_t CayenneLPP::decodeTTN(uint8_t *buffer, uint8_t len, JsonObject& root) {
   return count;
 
 }
+#endif

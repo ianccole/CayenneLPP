@@ -8,7 +8,9 @@
 #define CAYENNE_LPP_H
 
 #include <Arduino.h>
+#ifdef LPP_JSON
 #include <ArduinoJson.h>
+#endif
 
 #define LPP_DIGITAL_INPUT 0         // 1 byte
 #define LPP_DIGITAL_OUTPUT 1        // 1 byte
@@ -102,6 +104,7 @@ class CayenneLPP {
 
 public:
   CayenneLPP(uint8_t size);
+  CayenneLPP(uint8_t *buffer, uint8_t size);
   ~CayenneLPP();
 
   void reset(void);
@@ -112,9 +115,10 @@ public:
 
   // Decoder methods
   const char *getTypeName(uint8_t type);
+#ifdef LPP_JSON
   uint8_t decode(uint8_t *buffer, uint8_t size, JsonArray &root);
   uint8_t decodeTTN(uint8_t *buffer, uint8_t size, JsonObject &root);
-
+#endif
   // Original LPPv1 data types
 #ifndef CAYENNE_DISABLE_DIGITAL_INPUT
   uint8_t addDigitalInput(uint8_t channel, uint32_t value);
@@ -203,10 +207,11 @@ protected:
   uint8_t getTypeSize(uint8_t type);
   uint32_t getTypeMultiplier(uint8_t type);
   bool getTypeSigned(uint8_t type);
-
+public:
   float getValue(uint8_t *buffer, uint8_t size, uint32_t multiplier,
                  bool is_signed);
   uint32_t getValue32(uint8_t *buffer, uint8_t size);
+protected:
   template <typename T>
   uint8_t addField(uint8_t type, uint8_t channel, T value);
 
